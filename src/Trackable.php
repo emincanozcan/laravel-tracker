@@ -10,8 +10,9 @@ trait Trackable
     {
         $requestTracker = app()->make(RequestTracker::class);
         TrackerActivity::create([
-            "user_id" => $this->id,
             "request_id" => $requestTracker->getRequestId(),
+            "trackable_id" => $this->id,
+            "trackable_type" => get_class($this),
             "ip_address" => $requestTracker->getIpAddress(),
             "action" => $action,
             "message" => $message
@@ -20,6 +21,9 @@ trait Trackable
 
     public function getActivities()
     {
-        return TrackerActivity::whereUserId($this->id)->get();
+        return TrackerActivity::where([
+            "trackable_type" => get_class($this),
+            "trackable_id" => $this->id
+        ])->get();
     }
 }
