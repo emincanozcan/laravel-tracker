@@ -10,4 +10,11 @@ class TrackerServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__ . "/../database/migrations");
     }
+
+    public function register()
+    {
+        $this->app->singleton(RequestTracker::class, function () {
+            return new RequestTracker();
+        });
+    }
 }

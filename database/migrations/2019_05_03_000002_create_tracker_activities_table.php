@@ -17,9 +17,10 @@ class CreateTrackerActivitiesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable(); # null for visitors.
             $table->string('request_id', 20);
-            $table->string('action');
-            $table->string('message');
-            $table->timestamps();
+            $table->ipAddress('ip_address');
+            $table->string('action')->nullable();
+            $table->string('message')->nullable();
+            $table->timestamp('created_at')->nullable();
         });
     }
 
