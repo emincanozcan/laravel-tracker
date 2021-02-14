@@ -13,12 +13,19 @@
   },
   "autoload": {
     "psr-4": {
-      "emincan\\Tracker\\": "src/"
+      "Emincan\\Tracker\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "emincan\\Tracker\\Tests\\": "tests/"
+      "Emincan\\Tracker\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel" : {
+      "providers" : [
+        "Emincan\\Tracker\\TrackerServiceProvider"
+      ]
     }
   }
 }
