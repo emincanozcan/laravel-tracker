@@ -1,13 +1,24 @@
 {
-    "name": "emincan/laravel-tracker",
-    "type": "library",
-    "authors": [
-        {
-            "name": "Emincan Ozcan",
-            "email": "emincanozcann@gmail.com"
-        }
-    ],
-    "require-dev": {
-        "orchestra/testbench": "^6.12"
+  "name": "emincan/laravel-tracker",
+  "description": "User tracker library for the Laravel framework.",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Emincan Ozcan",
+      "email": "emincanozcann@gmail.com"
     }
+  ],
+  "require-dev": {
+    "orchestra/testbench": "^6.12"
+  },
+  "autoload": {
+    "psr-4": {
+      "emincan\\Tracker\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "emincan\\Tracker\\Tests\\": "tests/"
+    }
+  }
 }
