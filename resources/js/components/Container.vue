@@ -1,11 +1,13 @@
 <template>
-  <div class="max-w-5xl mx-auto">
+  <div class="max-w-5xl mx-auto px-4">
     <slot />
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  name: "Container",
+}
 </script>
 
 <style>

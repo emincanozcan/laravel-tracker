@@ -14,7 +14,8 @@ class TrackerController
     }
     public function activityStatistics()
     {
-        $startTime = now()->subDays(7)->toDateTimeString();
+        $days = request()->get('days') ?? 7;
+        $startTime = now()->subDays($days)->toDateTimeString();
         $endTime = now()->toDateTimeString();
 
         $totalCount = TrackerActivity::where("created_at", "<", $endTime)->where("created_at", ">", $startTime)->count();

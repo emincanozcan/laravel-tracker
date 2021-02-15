@@ -6,11 +6,13 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Montserrat', ...defaultTheme.fontFamily.sans],
+                sans: ['Fira Sans', ...defaultTheme.fontFamily.sans],
             },
         },
     },
-
+    plugins: [
+        require('@tailwindcss/forms'),
+    ],
     variants: {
         extend: {
             opacity: ['disabled'],
