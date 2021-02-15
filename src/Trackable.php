@@ -49,7 +49,6 @@ trait Trackable
                     "message" => $message,
                     "additional_data" => $additionalData
                 ]);
-
             });
         }
     }
