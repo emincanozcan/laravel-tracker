@@ -34,6 +34,25 @@ class TrackerController
     }
     public function lastActivities()
     {
-        return response()->json(TrackerActivity::paginate(2));
+        $data = TrackerActivity::when(
+            request()->get('action'),
+            fn ($query) => $query->where('action', request()->get('action'))
+        )->when(
+            request()->get('trackableType'),
+            fn ($query) => $query->where('trackable_type', request()->get('trackableType'))
+        )->paginate(10);
+
+        return response()->json($data);
+    }
+    public function filters()
+    {
+        $actions = TrackerActivity::selectRaw('DISTINCT action')->get()
+            ->map(fn ($d) => $d['action']);
+        $trackableTypes = TrackerActivity::selectRaw('DISTINCT trackable_type')->get()
+            ->map(fn ($d) => $d['trackable_type']);
+        return response()->json([
+            'action' => $actions,
+            'types' => $trackableTypes
+        ]);
     }
 }

@@ -2,6 +2,27 @@
   <container>
     <div class="bg-white rounded-md shadow-md px-4 py-4">
       <div class="mb-4 text-2xl font-medium text-gray-700">Last Activities</div>
+      <div class="my-4">
+        <label class="text-gray-700">
+          Action:
+          <Select v-model="filters.action">
+            <option value="">All</option>
+            <option :value="v" v-for="v in filterOptions.action" :key="v">
+              {{ v }}
+            </option>
+          </Select>
+        </label>
+
+        <label class="ml-6 text-gray-700">
+          Type:
+          <Select v-model="filters.trackableType">
+            <option value="">All</option>
+            <option :value="v" v-for="v in filterOptions.types" :key="v">
+              {{ v }}
+            </option>
+          </Select>
+        </label>
+      </div>
       <loader v-if="loading"> Statistics loading... </loader>
       <div v-else>
         <table class="min-w-full table-auto">
@@ -59,31 +80,56 @@
 </template>
 
 <script>
-import { ref } from "vue"
-import Container from "../components/Container.vue"
+import { ref, watch } from "vue"
+import queryString from "query-string"
+import Container from "../components/Container"
 import axios from "axios"
+import Select from "../components/Select"
+import Loader from "../components/Loader"
 export default {
-  components: { Container },
+  components: { Container, Select, Loader },
   name: "LastActivities",
   setup() {
     let loading = ref(true)
     let tableData = ref([])
     let paginationLinks = ref({})
-    loading.value = true // loading only initialize...
+    let filterOptions = ref({})
+    let filters = ref({
+      trackableType: "",
+      trackableId: "",
+      action: "",
+    })
+
+    watch(filters.value, () => fetch(window.tracker.lastActivities))
 
     async function fetch(url) {
       if (url == null) return
-      const response = await axios.get(url)
+      const urlWithFilters = queryString.stringifyUrl({
+        url,
+        query: filters.value,
+      })
+      const response = await axios.get(urlWithFilters)
       const data = response.data
       paginationLinks.value = data.links
       tableData.value = data.data
-      console.log(response)
-
       loading.value = false
     }
 
+    async function fetchFilters() {
+      const response = await axios.get(window.tracker.filters)
+      filterOptions.value = response.data
+    }
+
     fetch(window.tracker.lastActivities)
-    return { paginationLinks, tableData, loading, fetch }
+    fetchFilters()
+    return {
+      paginationLinks,
+      tableData,
+      loading,
+      filters,
+      filterOptions,
+      fetch,
+    }
   },
 }
 </script>

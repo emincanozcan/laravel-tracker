@@ -14,6 +14,7 @@
         window.tracker = {
             lastActivities: "{{ route('tracker.last-activities')}}",
             activityStatistics: "{{ route('tracker.activity-statistics')}}",
+            filters: "{{ route('tracker.filters')}}",
         };
     </script>
 </head>
