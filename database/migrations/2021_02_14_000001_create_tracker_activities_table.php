@@ -15,14 +15,21 @@ class CreateTrackerActivitiesTable extends Migration
     {
         Schema::create('tracker_activities', function (Blueprint $table) {
             $table->id();
-            $table->string('request_id', 20);
-            $table->unsignedBigInteger('trackable_id')->nullable(); # null for visitors.
-            $table->string('trackable_type', 255);
+            $table->string('request_id');
+            $table->unsignedBigInteger('trackable_id')->nullable();
+            $table->string('trackable_type');
             $table->ipAddress('ip_address')->nullable();
             $table->string('action')->nullable();
             $table->text('message')->nullable();
             $table->json('additional_data')->nullable();
             $table->timestamp('created_at')->nullable();
+
+            $table->index('ip_address');
+            $table->index('trackable_id');
+            $table->index('request_id');
+            $table->index('trackable_type');
+            $table->index('action');
+            $table->index(['trackable_type', 'action']);
         });
     }
 
