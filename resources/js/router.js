@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router";
 import Home from "./views/Home";
 import Statistics from "./views/Statistics";
+import LastActivities from './views/LastActivities';
 
 const routes = [
   {
@@ -12,6 +13,11 @@ const routes = [
     path: "/tracker/statistics",
     name: "Statistics",
     component: Statistics,
+  },
+  {
+    path: "/tracker/last-activities",
+    name: "LastActivities",
+    component: LastActivities,
   },
 ];
 

@@ -15,16 +15,14 @@ class TrackerController
     public function activityStatistics()
     {
         $days = request()->get('days') ?? 7;
-        $startTime = now()->subDays($days)->toDateTimeString();
-        $endTime = now()->toDateTimeString();
 
-        $totalCount = TrackerActivity::where("created_at", "<", $endTime)->where("created_at", ">", $startTime)->count();
+        $totalCount = TrackerActivity::lastsByDays($days)->count();
 
-        $countByTrackableTypes = TrackerActivity::where("created_at", "<", $endTime)->where("created_at", ">", $startTime)
+        $countByTrackableTypes = TrackerActivity::lastsByDays($days)
             ->selectRaw('count(*) as trackable_type_count, trackable_type as trackable_type')
             ->groupBy("trackable_type")->get();
 
-        $countByAction = TrackerActivity::where("created_at", "<", $endTime)->where("created_at", ">", $startTime)
+        $countByAction = TrackerActivity::lastsByDays($days)
             ->selectRaw('count(*) as action_count, action')
             ->groupBy("action")->get();
 

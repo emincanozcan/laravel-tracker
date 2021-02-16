@@ -17,12 +17,7 @@
         Reload Statistics
       </button>
     </div>
-    <div
-      class="my-8 text-center bg-white px-8 py-8 font-medium text-xl text-gray-700 rounded-md shadow-md"
-      v-if="loading"
-    >
-      Statistics loading...
-    </div>
+    <loader v-if="loading"> Statistics loading... </loader>
     <div v-else>
       <statistic-area title="General Statistics">
         <statistic-box

@@ -1,11 +1,10 @@
 <template>
-  <last-activities />
+  <div>home</div>
 </template>
 
 <script>
-import LastActivities from "../components/LastActivities.vue"
 export default {
-  components: { LastActivities },
+  components: {},
 }
 </script>
 
