@@ -23,9 +23,11 @@
           </Select>
         </label>
       </div>
-      <loader v-if="loading"> Statistics loading... </loader>
+      <loader v-if="loading"> Last Activities Are Loading... </loader>
       <div v-else>
-        <table class="min-w-full table-auto">
+        <table
+          class="min-w-full table-auto rounded-md shadow-md overflow-hidden"
+        >
           <thead class="justify-between">
             <tr class="bg-gray-700">
               <th
@@ -37,7 +39,7 @@
               </th>
             </tr>
           </thead>
-          <tbody class="rounded-md shadow-md">
+          <tbody>
             <tr
               class="border-b-2 border-gray-200"
               v-for="data in tableData"
@@ -62,7 +64,7 @@
         <div class="mt-4 flex justify-end">
           <button
             v-for="link in paginationLinks"
-            class="bg-gray-700 text-sm text-white ml-1 px-3 py-1 rounded-md focus:outline-none"
+            class="bg-gray-700 text-sm text-white ml-1 px-2 py-1 rounded-md focus:outline-none"
             :key="link.label"
             @click="fetch(link.url)"
             :disabled="link.active"
@@ -103,6 +105,7 @@ export default {
     watch(filters.value, () => fetch(window.tracker.lastActivities))
 
     async function fetch(url) {
+      loading.value = true
       if (url == null) return
       const urlWithFilters = queryString.stringifyUrl({
         url,
@@ -110,7 +113,11 @@ export default {
       })
       const response = await axios.get(urlWithFilters)
       const data = response.data
-      paginationLinks.value = data.links
+
+      if (data.links) {
+        paginationLinks.value = data.links
+      }
+
       tableData.value = data.data
       loading.value = false
     }

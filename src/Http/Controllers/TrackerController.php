@@ -14,16 +14,17 @@ class TrackerController
     }
     public function activityStatistics()
     {
-        $days = request()->get('days') ?? 7;
+        // $days = request()->get('days') ?? 7;
 
-        $totalCount = TrackerActivity::lastsByDays($days)->count();
+        // $totalCount = TrackerActivity::lastsByDays($days)->count();
+        $totalCount = TrackerActivity::count();
 
-        $countByTrackableTypes = TrackerActivity::lastsByDays($days)
-            ->selectRaw('count(*) as trackable_type_count, trackable_type as trackable_type')
+        $countByTrackableTypes = TrackerActivity::selectRaw('count(*) as trackable_type_count, trackable_type as trackable_type')
+            // ->lastsByDays($days)
             ->groupBy("trackable_type")->get();
 
-        $countByAction = TrackerActivity::lastsByDays($days)
-            ->selectRaw('count(*) as action_count, action')
+        $countByAction = TrackerActivity::selectRaw('count(*) as action_count, action')
+            // ->lastsByDays($days)
             ->groupBy("action")->get();
 
         return response()->json([
