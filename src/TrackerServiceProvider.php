@@ -2,6 +2,7 @@
 
 namespace Emincan\Tracker;
 
+use Emincan\Tracker\Console\Commands\TrackerClearCommand;
 use Illuminate\Support\ServiceProvider;
 
 class TrackerServiceProvider extends ServiceProvider
@@ -15,6 +16,12 @@ class TrackerServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../public' => public_path('vendor/emincan/tracker'),
         ], 'tracker-assets');
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                TrackerClearCommand::class,
+            ]);
+        }
     }
 
     public function register()
