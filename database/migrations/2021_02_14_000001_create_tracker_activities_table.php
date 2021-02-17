@@ -17,7 +17,7 @@ class CreateTrackerActivitiesTable extends Migration
             $table->id();
             $table->string('request_id');
             $table->unsignedBigInteger('trackable_id')->nullable();
-            $table->string('trackable_type');
+            $table->string('trackable_type')->nullable();
             $table->ipAddress('ip_address')->nullable();
             $table->string('action')->nullable();
             $table->text('message')->nullable();

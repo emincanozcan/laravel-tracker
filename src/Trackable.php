@@ -6,18 +6,16 @@ use Emincan\Tracker\Models\TrackerActivity;
 
 trait Trackable
 {
-    public function saveActivity($action, $message = null, $additional_data = [])
+    protected static $trackedEvents = ["created", "updated", "deleted"];
+
+    public function saveActivity($action, $message = null, $additionalData = [])
     {
-        $requestTracker = app()->make(RequestTracker::class);
-        TrackerActivity::create([
-            "request_id" => $requestTracker->getRequestId(),
-            "trackable_id" => $this->id,
-            "trackable_type" => get_class($this),
-            "ip_address" => $requestTracker->getIpAddress(),
-            "action" => $action,
-            "message" => $message,
-            "additional_data" => $additional_data
-        ]);
+        (new Tracker)
+            ->setTrackable(get_class($this), $this->id)
+            ->setAction($action)
+            ->setMessage($message)
+            ->setAdditionalData($additionalData)
+            ->save();
     }
 
     public function getActivities()
@@ -30,25 +28,23 @@ trait Trackable
 
     public static function bootTrackable()
     {
-        $events = ["created", "updated", "deleted"];
-        foreach ($events as $event) {
+        foreach (self::$trackedEvents as $event) {
             $message = class_basename(self::class) . " is " . $event;
             self::$event(function ($model) use ($event, $message) {
-
                 $additionalData = [];
-                if ($event === "updated") $additionalData = ["original" => $model->getOriginal(), "changes" => $model->getChanges()];
+                if ($model->wasChanged()) {
+                    $additionalData = [
+                        "original" => $model->getOriginal(),
+                        "changes" => $model->getChanges()
+                    ];
+                }
 
-                $requestTracker = app()->make(RequestTracker::class);
-
-                TrackerActivity::create([
-                    "request_id" => $requestTracker->getRequestId(),
-                    "trackable_id" => $model->id,
-                    "trackable_type" => self::class,
-                    "ip_address" => $requestTracker->getIpAddress(),
-                    "action" => $event,
-                    "message" => $message,
-                    "additional_data" => $additionalData
-                ]);
+                (new Tracker)
+                    ->setTrackable(self::class, $model->id)
+                    ->setAction($event)
+                    ->setMessage($message)
+                    ->setAdditionalData($additionalData)
+                    ->save();
             });
         }
     }
