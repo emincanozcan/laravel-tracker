@@ -8,10 +8,10 @@ use Emincan\Tracker\Tests\Models\User;
 use Emincan\Tracker\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ExampleTest extends TestCase
+class ModelEventsTrackingTest extends TestCase
 {
     use RefreshDatabase;
-    
+
     /** @test */
     public function createdEventIsTracked()
     {
@@ -98,25 +98,6 @@ class ExampleTest extends TestCase
         $activity = TrackerActivity::orderByDesc('id')->first();
         $this->assertNotEquals($activity->action, 'deleted');
         $this->assertCount($count, TrackerActivity::all());
-    }
-
-    /** @test */
-    public function trackableModelsHasSaveActivityMethod()
-    {
-        $user = $this->createUser();
-        $this->assertTrue(method_exists($user, 'saveActivity'));
-
-        $post = $user->posts()->create(['title' => "test title"]);
-        $this->assertTrue(method_exists($post, 'saveActivity'));
-    }
-
-    /** @test */
-    public function notTrackableModelsHasNotSaveActivityMethod()
-    {
-        $user = $this->createUser();
-        $post = $user->posts()->create(['title' => "test title"]);
-        $tag = $post->tags()->create(['title' => "test tag"]);
-        $this->assertFalse(method_exists($tag, 'saveActivity'));
     }
 
     private function createUser()
