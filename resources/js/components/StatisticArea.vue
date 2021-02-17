@@ -1,6 +1,6 @@
 <template>
   <div class="px-4 py-4 my-4 shadow-md rounded-md bg-white">
-    <div class="mb-4 text-2xl font-medium text-gray-700">{{ title }}</div>
+    <Title :text="title" />
     <div class="grid grid-cols-3 gap-4">
       <slot />
     </div>
@@ -8,7 +8,9 @@
 </template>
 
 <script>
+import Title from "./Title.vue"
 export default {
+  components: { Title },
   name: "StatisticArea",
   props: ["title"],
 }

@@ -8,13 +8,15 @@
     <title>Tracker{{ config('app.name') ? ' - ' . config('app.name') : '' }}</title>
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset("vendor/emincan/tracker/css/app.css") }}">
     <script>
         window.tracker = {
             lastActivities: "{{ route('tracker.last-activities')}}",
             activityStatistics: "{{ route('tracker.activity-statistics')}}",
             filters: "{{ route('tracker.filters')}}",
+            activityDetailsByIp: "{{ route('tracker.activity-details-by-ip', 'ipAddress')}}",
+            activityDetailsByTrackable: "{{ route('tracker.activity-details-by-trackable', ['trackableType', 'trackableId'])}}"
         };
     </script>
 </head>

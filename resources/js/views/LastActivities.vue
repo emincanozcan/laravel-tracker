@@ -1,27 +1,41 @@
 <template>
   <container>
     <div class="bg-white rounded-md shadow-md px-4 py-4">
-      <div class="mb-4 text-2xl font-medium text-gray-700">Last Activities</div>
-      <div class="my-4">
-        <label class="text-gray-700">
-          Action:
-          <Select v-model="filters.action">
-            <option value="">All</option>
-            <option :value="v" v-for="v in filterOptions.action" :key="v">
-              {{ v }}
-            </option>
-          </Select>
-        </label>
-
-        <label class="ml-6 text-gray-700">
-          Type:
-          <Select v-model="filters.trackableType">
-            <option value="">All</option>
-            <option :value="v" v-for="v in filterOptions.types" :key="v">
-              {{ v }}
-            </option>
-          </Select>
-        </label>
+      <Title text="Last Activities" />
+      <div class="my-4 flex items-end justify-between">
+        <div class="flex flex-wrap justify-between">
+          <activity-filter text="Trackable Type" class="ml-0">
+            <Select v-model="filters.trackable_type">
+              <option value="">All</option>
+              <option :value="v" v-for="v in filterOptions.types" :key="v">
+                {{ v }}
+              </option>
+            </Select>
+          </activity-filter>
+          <activity-filter text="Trackable ID">
+            <Input type="text" v-model="filters.trackable_id" class="w-24" />
+          </activity-filter>
+          <activity-filter text="Action">
+            <Select v-model="filters.action">
+              <option value="">All</option>
+              <option :value="v" v-for="v in filterOptions.action" :key="v">
+                {{ v }}
+              </option>
+            </Select>
+          </activity-filter>
+          <activity-filter text="Ip Address">
+            <Input type="text" v-model="filters.ip_address" class="w-32" />
+          </activity-filter>
+          <activity-filter text="Request ID">
+            <Input type="text" v-model="filters.request_id" class="w-32" />
+          </activity-filter>
+        </div>
+        <div>
+          <Button class="w-20 py-2" @click.native="filter">Filter</Button>
+          <Button class="w-20 py-2 ml-2" @click.native="clearFilters">
+            Clear
+          </Button>
+        </div>
       </div>
       <loader v-if="loading"> Last Activities Are Loading... </loader>
       <div v-else>
@@ -30,13 +44,12 @@
         >
           <thead class="justify-between">
             <tr class="bg-gray-700">
-              <th
-                class="px-4 py-2 font-medium text-left"
-                v-for="head in ['Type', 'Id', 'Action', 'Message', 'Date']"
-                :key="head"
-              >
-                <span class="text-gray-100">{{ head }}</span>
-              </th>
+              <activity-th text="Trackable" />
+              <activity-th text="Request ID" />
+              <activity-th text="Action" />
+              <activity-th text="Ip Address" />
+              <activity-th text="Message" />
+              <activity-th text="Date" />
             </tr>
           </thead>
           <tbody>
@@ -45,36 +58,49 @@
               v-for="data in tableData"
               :key="data.id"
             >
-              <td
-                class="px-4 py-2 text-gray-700"
-                :key="key"
-                v-for="key in [
-                  'trackable_type',
-                  'trackable_id',
-                  'action',
-                  'message',
-                  'created_at',
-                ]"
+              <activity-td
+                @click.native="
+                  setFilterFromData(['trackable_id', 'trackable_type'], data)
+                "
+                class="text-blue-700 cursor-pointer flex items-center justify-between"
               >
-                {{ data[key] }}
-              </td>
+                <span>{{ data.trackable_type }}</span>
+                <span>{{ data.trackable_id }}</span>
+              </activity-td>
+              <activity-td
+                @click.native="setFilterFromData(['request_id'], data)"
+                class="text-blue-700 cursor-pointer"
+              >
+                {{ data.request_id }}
+              </activity-td>
+              <activity-td
+                @click.native="setFilterFromData(['action'], data)"
+                class="text-blue-700 cursor-pointer"
+              >
+                {{ data.action }}
+              </activity-td>
+              <activity-td
+                @click.native="setFilterFromData(['ip_address'], data)"
+                class="text-blue-700 cursor-pointer"
+              >
+                {{ data.ip_address }}
+              </activity-td>
+              <activity-td :title="data.message">
+                {{ data.message.substring(0, 24) }}
+              </activity-td>
+              <activity-td>{{ data.created_at }}</activity-td>
             </tr>
           </tbody>
         </table>
         <div class="mt-4 flex justify-end">
-          <button
+          <Button
             v-for="link in paginationLinks"
-            class="bg-gray-700 text-sm text-white ml-1 px-2 py-1 rounded-md focus:outline-none"
             :key="link.label"
-            @click="fetch(link.url)"
-            :disabled="link.active"
-            :class="
-              link.active || link.url == null
-                ? 'opacity-50 cursor-default'
-                : 'opactiy-100'
-            "
-            v-html="link.label"
-          ></button>
+            @click.native="fetch(link.url)"
+            :disabled="link.active || link.url == null"
+          >
+            <span v-html="link.label" class="text-sm"></span>
+          </Button>
         </div>
       </div>
     </div>
@@ -82,61 +108,83 @@
 </template>
 
 <script>
-import { ref, watch } from "vue"
 import queryString from "query-string"
 import Container from "../components/Container"
 import axios from "axios"
 import Select from "../components/Select"
 import Loader from "../components/Loader"
+import Input from "../components/Input.vue"
+import ActivityTh from "../components/ActivityTh.vue"
+import ActivityTd from "../components/ActivityTd.vue"
+import Button from "../components/Button.vue"
+import ActivityFilter from "../components/ActivityFilter.vue"
+import Title from "../components/Title.vue"
 export default {
-  components: { Container, Select, Loader },
+  components: {
+    Container,
+    Select,
+    Loader,
+    Input,
+    ActivityTh,
+    ActivityTd,
+    Button,
+    ActivityFilter,
+    Title,
+  },
   name: "LastActivities",
-  setup() {
-    let loading = ref(true)
-    let tableData = ref([])
-    let paginationLinks = ref({})
-    let filterOptions = ref({})
-    let filters = ref({
-      trackableType: "",
-      trackableId: "",
-      action: "",
-    })
-
-    watch(filters.value, () => fetch(window.tracker.lastActivities))
-
-    async function fetch(url) {
-      loading.value = true
-      if (url == null) return
+  data() {
+    return {
+      loading: true,
+      tableData: [],
+      paginationLinks: {},
+      filtersInitialState: {
+        trackable_type: "",
+        trackable_id: "",
+        ip_address: "",
+        request_id: "",
+        action: "",
+      },
+      filterOptions: {},
+      filters: {},
+    }
+  },
+  methods: {
+    clearFilters() {
+      this.filters = Object.assign({}, this.filtersInitialState)
+      this.fetch()
+    },
+    setFilterFromData(keys, data) {
+      this.filters = Object.assign({}, this.filtersInitialState)
+      keys.forEach((key) => (this.filters[key] = data[key]))
+      this.fetch()
+    },
+    filter() {
+      this.fetch(window.tracker.lastActivities)
+    },
+    async fetchFilters() {
+      const response = await axios.get(window.tracker.filters)
+      this.filterOptions = response.data
+    },
+    async fetch(url) {
+      this.loading = true
+      if (typeof url == "undefined") url = window.tracker.lastActivities
       const urlWithFilters = queryString.stringifyUrl({
-        url,
-        query: filters.value,
+        url: url,
+        query: this.filters,
       })
       const response = await axios.get(urlWithFilters)
       const data = response.data
 
-      if (data.links) {
-        paginationLinks.value = data.links
-      }
+      if (data.links) this.paginationLinks = data.links
+      this.tableData = data.data
 
-      tableData.value = data.data
-      loading.value = false
-    }
-
-    async function fetchFilters() {
-      const response = await axios.get(window.tracker.filters)
-      filterOptions.value = response.data
-    }
-
-    fetch(window.tracker.lastActivities)
-    fetchFilters()
-    return {
-      paginationLinks,
-      tableData,
-      loading,
-      filters,
-      filterOptions,
-      fetch,
-    }
+      this.loading = false
+    },
+  },
+  created() {
+    this.filters = Object.assign({}, this.filtersInitialState)
+    this.fetchFilters()
+    this.fetch(window.tracker.lastActivities)
   },
 }
 </script>
