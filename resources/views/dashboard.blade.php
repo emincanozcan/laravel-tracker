@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{{ asset("vendor/emincan/tracker/css/app.css") }}">
     <script>
         window.tracker = {
+            prefix: "{{ config('tracker.dashboard.prefix') }}",
             lastActivities: "{{ route('tracker.last-activities')}}",
             activityStatistics: "{{ route('tracker.activity-statistics')}}",
             filters: "{{ route('tracker.filters')}}",
