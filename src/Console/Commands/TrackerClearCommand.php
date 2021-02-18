@@ -16,17 +16,16 @@ class TrackerClearCommand extends Command
         $removeBeforeDate = now()->subDays($this->option('older-than-days'))->toDateTimeString();
 
         if (!$this->option('no-question')) {
-            $confirmation = $this->ask("Tracker records that are created before {$removeBeforeDate} will be deleted.\n Type 'yes' and press enter if you want to proceed");
-            if ($confirmation !== "yes") return 0;
+            $confirmation = $this->confirm("Records created before {$this->option('older-than-days')} days will be deleted. Do you wish to continue?");
+            if (!$confirmation) return 1;
         }
 
         $this->info("Deleting process is starting. Please wait until to see the success message.");
 
         $totalCount = TrackerActivity::count();
         $totalDeletedCount = 0;
-
         do {
-            $deletedRows = TrackerActivity::where('created_at', '<', $removeBeforeDate)
+            $deletedRows = TrackerActivity::where('created_at', '<=', $removeBeforeDate)
                 ->limit($this->option('chunk'))->delete();
             $totalDeletedCount += $deletedRows;
             $this->info("Status: {$totalDeletedCount} / {$totalCount} deleted.");
