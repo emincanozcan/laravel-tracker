@@ -6,7 +6,7 @@
         <statistic-box
           class="bg-green-500 text-white"
           :count="data.total_count"
-          title="Total Count Of Total Activities"
+          title="Total Count Of Statistics"
         />
       </statistic-area>
 
@@ -32,7 +32,7 @@
     </div>
   </container>
 </template>
- 
+
 <script>
 import { ref } from "vue"
 import axios from "axios"

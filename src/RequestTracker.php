@@ -11,7 +11,7 @@ class RequestTracker
 
     public function __construct()
     {
-        $this->requestId = bin2hex(random_bytes(5));
+        $this->requestId = bin2hex(random_bytes(16));
         $this->ipAddress = request()->ip();
     }
 

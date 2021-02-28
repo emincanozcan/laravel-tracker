@@ -6,13 +6,6 @@
       </div>
       <nav class="flex">
         <router-link
-          :to="{ name: 'Home' }"
-          active-class="opacity-75"
-          class="mr-8 text-white inline-block px-4 py-2 tracking-wider"
-        >
-          Home
-        </router-link>
-        <router-link
           :to="{ name: 'LastActivities' }"
           class="mr-8 text-white inline-block px-4 py-2 tracking-wider"
           active-class="opacity-75"
