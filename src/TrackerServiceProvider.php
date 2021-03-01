@@ -18,7 +18,7 @@ class TrackerServiceProvider extends ServiceProvider
             __DIR__ . '/../public' => public_path('vendor/emincan/tracker'),
         ], 'tracker-assets');
         $this->publishes([
-            __DIR__ . "/../config" => config_path('tracker.php')
+            __DIR__ . "/../config/tracker.php" => config_path('tracker.php')
         ], 'tracker-config');
         if ($this->app->runningInConsole()) {
             $this->commands([
