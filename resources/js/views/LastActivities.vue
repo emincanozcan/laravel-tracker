@@ -66,16 +66,20 @@
                 @click.native="
                   setFilterFromData(['trackable_id', 'trackable_type'], data)
                 "
-                class="text-blue-700 cursor-pointer flex items-center justify-between"
               >
-                <span>{{ data.trackable_type }}</span>
-                <span>{{ data.trackable_id }}</span>
+                <div
+                  class="text-blue-700 cursor-pointer flex items-center justify-between"
+                >
+                  <span>{{ data.trackable_type }}</span>
+                  <span>{{ data.trackable_id }}</span>
+                </div>
               </activity-td>
               <activity-td
                 @click.native="setFilterFromData(['request_id'], data)"
                 class="text-blue-700 cursor-pointer"
+                :title="data.request_id"
               >
-                {{ data.request_id }}
+                {{ data.request_id.substring(0, 4) }}...
               </activity-td>
               <activity-td
                 @click.native="setFilterFromData(['action'], data)"
@@ -99,9 +103,9 @@
                   v-if="Object.values(data.additional_data).length > 0"
                   @click="openModal(data.additional_data)"
                 >
-                  Show Additional Details
+                  Click to show
                 </button>
-                <span v-else> No Additional Details </span>
+                <span v-else> Not found </span>
               </activity-td>
             </tr>
           </tbody>
