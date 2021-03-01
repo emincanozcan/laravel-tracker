@@ -6,7 +6,7 @@ use Emincan\Tracker\Models\TrackerActivity;
 
 trait Trackable
 {
-    protected static $trackedEvents = ["created", "updated", "deleted"];
+    protected static $trackEvents = ["created", "updated", "deleted"];
 
     public function saveActivity($action, $message = null, $additionalData = [])
     {
@@ -28,7 +28,7 @@ trait Trackable
 
     public static function bootTrackable()
     {
-        foreach (self::$trackedEvents as $event) {
+        foreach (self::$trackEvents as $event) {
             $message = class_basename(self::class) . " is " . $event;
             self::$event(function ($model) use ($event, $message) {
                 $additionalData = [];
