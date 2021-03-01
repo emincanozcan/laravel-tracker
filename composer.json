@@ -1,6 +1,7 @@
 {
   "name": "emincan/laravel-tracker",
   "description": "User tracker library for the Laravel framework.",
+  "version": "0.1",
   "type": "library",
   "authors": [
     {
@@ -22,8 +23,8 @@
     }
   },
   "extra": {
-    "laravel" : {
-      "providers" : [
+    "laravel": {
+      "providers": [
         "Emincan\\Tracker\\TrackerServiceProvider"
       ]
     }
