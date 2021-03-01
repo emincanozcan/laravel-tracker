@@ -57,7 +57,7 @@ return [
 ```
 # How To Track Activities
 
-There are 2 main using approach for Laravel Tracker. You can use only one of them or mix both of them.
+Basically, there are 2 main approaches to using Laravel Tracker. You can use only one of them or mix both of them.
 
 ## Tracking Model Activities Automatically
 
