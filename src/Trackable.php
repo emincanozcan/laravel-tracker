@@ -10,7 +10,7 @@ trait Trackable
 
     public function saveActivity($action, $message = null, $additionalData = [])
     {
-        (new Tracker)
+        (new Tracker())
             ->setTrackable(get_class($this), $this->id)
             ->setAction($action)
             ->setMessage($message)
@@ -39,7 +39,7 @@ trait Trackable
                     ];
                 }
 
-                (new Tracker)
+                (new Tracker())
                     ->setTrackable(self::class, $model->id)
                     ->setAction($event)
                     ->setMessage($message)

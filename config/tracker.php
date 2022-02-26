@@ -19,7 +19,7 @@ return [
      *  Basically if you set it as "laravel-tracker",
      *  then dashboard endpoint is become yourdomain.com/laravel-tracker.
      *  If you don't change initial value which is set to "tracker",
-     *  your default endpoint is yourdomain.com/tracker  
+     *  your default endpoint is yourdomain.com/tracker
      */
     'prefix' => 'tracker'
   ],

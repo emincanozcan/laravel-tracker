@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-  use HasFactory, Trackable;
-  protected $guarded = [];
+    use HasFactory;
+    use Trackable;
+    protected $guarded = [];
 
-  public function tags()
-  {
-    return $this->hasMany(Tag::class);
-  }
+    public function tags()
+    {
+        return $this->hasMany(Tag::class);
+    }
 }

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Emincan\Tracker;
-
 
 class RequestTracker
 {

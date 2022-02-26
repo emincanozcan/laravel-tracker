@@ -17,7 +17,9 @@ class TrackerClearCommand extends Command
 
         if (!$this->option('no-question')) {
             $confirmation = $this->confirm("Records created before {$this->option('older-than-days')} days will be deleted. Do you wish to continue?");
-            if (!$confirmation) return 1;
+            if (!$confirmation) {
+                return 1;
+            }
         }
 
         $this->info("Deleting process is starting. Please wait until to see the success message.");
