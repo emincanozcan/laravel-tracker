@@ -8,6 +8,9 @@
       "email": "emincanozcann@gmail.com"
     }
   ],
+  "require": {
+    "php": ">=8.0"
+  },
   "require-dev": {
     "orchestra/testbench": "^6.12",
     "friendsofphp/php-cs-fixer": "^3.6"
