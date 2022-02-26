@@ -132,14 +132,14 @@ class ApiEndpointsTest extends TestCase
       $this->post->saveActivity("post-action{$i}", 'test-message');
     }
 
-    $expectedCountByAction = [['action' => "created", "action_count" => "3"]];
+    $expectedCountByAction = [['action' => "created", "action_count" => 3]];
     for ($i = 0; $i < 10; $i++) {
       $expectedCountByAction[] = [
-        "action_count" => "1",
+        "action_count" => 1,
         "action" => "user-action{$i}"
       ];
       $expectedCountByAction[] = [
-        "action_count" => "1",
+        "action_count" => 1,
         "action" => "post-action{$i}"
       ];
     }
@@ -147,11 +147,11 @@ class ApiEndpointsTest extends TestCase
 
     $expectedTrackableTypeCount = [
       [
-        "trackable_type_count" =>  (string)TrackerActivity::where('trackable_type', get_class($this->post))->count(),
+        "trackable_type_count" =>  TrackerActivity::where('trackable_type', get_class($this->post))->count(),
         "trackable_type" =>  get_class($this->post)
       ],
       [
-        "trackable_type_count" =>  (string)TrackerActivity::where('trackable_type', get_class($this->user))->count(),
+        "trackable_type_count" =>  TrackerActivity::where('trackable_type', get_class($this->user))->count(),
         "trackable_type" =>  get_class($this->user)
       ]
     ];
