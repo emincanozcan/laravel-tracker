@@ -147,12 +147,12 @@ class ApiEndpointsTest extends TestCase
 
         $expectedTrackableTypeCount = [
             [
-                "trackable_type_count" =>  TrackerActivity::where('trackable_type', get_class($this->post))->count(),
-                "trackable_type" =>  get_class($this->post)
+                "trackable_type_count" => TrackerActivity::where('trackable_type', get_class($this->post))->count(),
+                "trackable_type" => get_class($this->post)
             ],
             [
-                "trackable_type_count" =>  TrackerActivity::where('trackable_type', get_class($this->user))->count(),
-                "trackable_type" =>  get_class($this->user)
+                "trackable_type_count" => TrackerActivity::where('trackable_type', get_class($this->user))->count(),
+                "trackable_type" => get_class($this->user)
             ]
         ];
 

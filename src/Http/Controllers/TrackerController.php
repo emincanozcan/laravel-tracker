@@ -16,13 +16,23 @@ class TrackerController
         $totalCount = TrackerActivity::count();
 
         $countByTrackableTypes = TrackerActivity::selectRaw('count(*) as trackable_type_count, trackable_type as trackable_type')
-            ->groupBy("trackable_type")->get();
+            ->groupBy("trackable_type")
+            ->get()
+            ->map(function ($item) {
+                $item->trackable_type_count = (int)$item->trackable_type_count;
+                return $item;
+            });;
 
         $countByAction = TrackerActivity::selectRaw('count(*) as action_count, action')
-            ->groupBy("action")->get();
+            ->groupBy("action")
+            ->get()
+            ->map(function ($item) {
+                $item->action_count = (int)$item->action_count;
+                return $item;
+            });
 
         return response()->json([
-            "total_count" => $totalCount,
+            "total_count" => (int)$totalCount,
             "count_by_trackable_types" => $countByTrackableTypes,
             "count_by_action" => $countByAction
         ]);
