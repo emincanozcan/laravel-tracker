@@ -12,7 +12,7 @@
     "php": ">=8.0"
   },
   "require-dev": {
-    "orchestra/testbench": "^6.12",
+    "orchestra/testbench": "^7.1.0",
     "friendsofphp/php-cs-fixer": "^3.6"
   },
   "autoload": {
