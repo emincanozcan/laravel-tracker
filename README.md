@@ -1,7 +1,7 @@
 # Laravel Tracker
 
-Laravel Tracker package provides an interface to track various
-activities in Laravel projects.
+The Laravel Tracker package provides an interface to track various
+activities within Laravel projects.
 
 - It tracks events on models you want,
 - It also provides some methods to you if you want to track some activities
@@ -9,30 +9,30 @@ activities in Laravel projects.
 - It shows all the tracked activities data and statistics on a beautiful
   dashboard
 
-# Table Of Contents
+## Table Of Contents
 
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [How To Track Activities](#how-to-track-activities)
   - [Tracking Model Events Automatically](#tracking-model-events-automatically)
   - [Tracking Activities Manually](#tracking-activities-manually)
-- [Showing Activities & Activity Statistics With Dashboard](#showing-activities---activity-statistics-with-dashboard)
+- [Dashboard](#dashboard)
 - [Clearing Old Data](#clearing-old-data)
 
-# Installation
+## Installation
 
 ```bash
 # Install package
 $ composer require emincan/laravel-tracker
 
 # Run installer
-php artisan tracker:install
+$ php artisan tracker:install
 
 # Run migrations
-php artisan migrate
+$ php artisan migrate
 ```
 
-# Configuration
+## Configuration
 
 After the installation, the configuration file will be located at
 `config/tracker.php`.
@@ -60,17 +60,16 @@ return [
 ];
 ```
 
-# How To Track Activities
+## How To Track Activities
 
-There are two main approaches to using Laravel Tracker. You can use only one of
-them or mix both of them.
+Laravel Tracker offers two main approaches that can be used separately or combined.
 
-## Tracking Model Events Automatically
+### Tracking Model Events Automatically
 
-This usage style provides to track model activities by listening model events
+This usage style allows for tracking model activities by listening to model events.
 ([Eloquent Events](https://laravel.com/docs/9.x/eloquent#events)).
 
-To begin to track a model; adding the `Trackable` trait to the model is enough.
+To start tracking a model, all you need to do is add the Trackable trait to the model.
 
 ```php
 use Emincan\Tracker\Trackable;
@@ -83,8 +82,8 @@ class User extends Authenticatable
 
 By default, it tracks `created`, `updated`, `deleted` events.
 
-To update this list of events that will be listened, create a `$trackEvents`
-property like below:
+To customize the list of events that Laravel Tracker will listen to,
+you can create a `$trackEvents` property in the model:
 
 ```php
 use Emincan\Tracker\Trackable;
@@ -96,17 +95,17 @@ class User extends Authenticatable
 }
 ```
 
-Laravel Tracker provides support for all of the Laravel Eloquent model events.
+Laravel Tracker supports all of the Laravel Eloquent model events.
 
 For some special events (like `updated`), it also stores what changed on the
 model.
 
-## Tracking Activities Manually
+### Tracking Activities Manually
 
-This usage style looks like logging but it offers more.
+This usage style may resemble logging, but it offers more functionality.
 
-Let's assume your users can publish new posts on your system. To track these
-activities manually, the following example can be used.
+For instance, let's assume that users can publish new posts on your system.
+You can manually track these activities by using the following example:
 
 ```php
 // your code...
@@ -122,33 +121,38 @@ activities manually, the following example can be used.
   ->save();
 ```
 
-Laravel Tracker adds request-id and IP address automatically before saving the request.
+Laravel Tracker automatically adds the request ID and IP address before saving the request.
 
-# Showing Activities & Activity Statistics With Dashboard
+## Dashboard
 
-The dashboard url is configurable, configuration file is located at `config/trackable.php`.
+By default, the dashboard url is `yourdomain.com/tracker`.
 
-By default the url is `yourdomain.com/tracker`.
+The url is configurable, configuration file is located at `config/trackable.php`.
 
-# Clearing Old Data
+## Clearing Old Data
 
-Clearing old data is important to create more space on the database by removing
-unnecessary records, preventing performance problems, etc.
+Clearing old data is an essential task to create more space in the database by
+removing unnecessary records, preventing performance problems, and ensuring
+smooth operations.
 
 Laravel Tracker has a `clear` command for this.
 
-As basic usage, `php artisan tracker:clear` command removes activity records older than 7 days.
+The basic usage of the `php artisan tracker:clear` command is to remove activity
+records that are older than 7 days.
 
 The command supports these additional parameters;
 
-- `--older-than-days`: Use to specify the creation date of data to be removed.
-  The default value is 7 days.
-- `--chunk`: Use to specify chunk size. If you have a lot of old data to
-  remove, trying to delete all of them with a single database request can be
-  cause some lock / performance issues. To solve this problem, the command is
-  supports chunk option. If you have 10.000 records and chunk is set to 1.000,
-  the data is removed by 10 database requests - every request removes 1.000
-  records. The default value is 5000.
-- `--no-question`: By default, the clear command asks some questions to be sure
-  you want to delete data. With the `no-question` flag, the process is complete
-  without asking questions.
+- `--older-than-days`: The --older-than-days parameter is used to specify the
+  minimum age of data to be removed. By default, data older than 7 days will be
+  removed.
+- `--chunk`: The --chunk option allows you to specify the size of the chunks
+  that will be deleted at a time. This is useful when there is a large amount of
+  data to be deleted, as trying to delete all of them with a single database request
+  can cause lock and performance issues. For example, if you have 10,000 records
+  and set the chunk size to 1,000, the data will be removed in 10 database
+  requests, with each request removing 1,000 records. The default value
+  for --chunk is 5,000.
+- `--no-question`: By default, the clear command of Laravel Tracker prompts
+  the user with questions to confirm whether they want to delete data.
+  However, if you use the no-question flag with the command, the process will
+  complete without asking any questions.
